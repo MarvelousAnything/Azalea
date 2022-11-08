@@ -22,7 +22,7 @@ azalea::debug::Profiler::~Profiler()
 
 void azalea::debug::Profiler::startProfile( const std::string& session, std::string file )
 {
-    ProfileSession newSession = {.name = session, .startTime = 0, .file = std::move(file)}; // TODO(Chloe) When time gets added fix this
+    ProfileSession newSession = {.startTime = 0, .name = session, .file = std::move(file)}; // TODO(Chloe) When time gets added fix this
     this->m_activeSessions.insert({session, newSession});
 }
 

@@ -8,11 +8,10 @@
 namespace azalea::debug {
 
     struct ProfileSession {
-        const std::string& name;
-
         uint64_t startTime;
         uint64_t endTime;
 
+        std::string name;
         std::string file;
     };
 
