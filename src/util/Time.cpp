@@ -26,7 +26,7 @@ void azalea::util::time::Stopwatch::end()
 }
 
 double azalea::util::time::Stopwatch::elapsed() {
-    if (this->m_endTime == 0) {
+    if (this->m_endTime == -1) {
         return glfwGetTime() - this->m_startTime;
     }
     return this->m_endTime - glfwGetTime();
