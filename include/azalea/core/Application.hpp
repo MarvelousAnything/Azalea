@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <string>
+#include <azalea/core/Window.hpp>
 
 namespace azalea {
 
@@ -24,10 +25,14 @@ namespace azalea {
 
         void run();// backend run function to make things work
 
+        AzaleaWindow* getWindow();
+
         static AzaleaApplication* getInstance();
 
     private:
         ApplicationProps& m_applicationProps;
+
+        AzaleaWindow* m_window = nullptr;
 
         static AzaleaApplication* s_instance;
     };

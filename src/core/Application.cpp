@@ -9,9 +9,15 @@ azalea::AzaleaApplication::AzaleaApplication( azalea::ApplicationProps& applicat
 {
     spdlog::set_pattern( "[%H:%M:%S %z] [%n] %v" );
     azalea::AzaleaApplication::s_instance = this;
+
+
+    WindowProps props = {.width = 720, .height = 720, .title = applicationProps.name};
+    this->m_window = new AzaleaWindow(props);
 }
 
 azalea::AzaleaApplication::~AzaleaApplication() {}
+
+azalea::AzaleaWindow* azalea::AzaleaApplication::getWindow() { return this->m_window; }
 
 azalea::AzaleaApplication* azalea::AzaleaApplication::getInstance() { return AzaleaApplication::s_instance; }
 
