@@ -7,7 +7,8 @@ namespace azalea {
     typedef int32_t MouseButton;
 
     namespace Mouse {
-        enum : MouseButton {
+        enum : MouseButton
+        {
             NONE = -1,
 
             // retrieved from GLFW/glfw3.h
@@ -30,7 +31,7 @@ namespace azalea {
         };
     }
 
-}
+}// namespace azalea
 
 
 #endif// AZALEA_MOUSE_HPP

@@ -8,5 +8,4 @@ namespace azalea {
 }
 
 
-
 #endif// AZALEA_EVENTS_HPP
