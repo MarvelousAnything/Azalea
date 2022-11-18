@@ -5,20 +5,20 @@
 
 namespace azalea {
     class Event;
-    typedef void EventListener(const Event&  event);
+    typedef void EventListener( const Event& event );
 
     class Event {
     public:
         Event();
         ~Event();
 
-        void addListener(EventListener listener);
+        void addListener( EventListener listener );
         void invoke();
 
     protected:
         std::vector<EventListener*> m_listeners;
     };
 
-}
+}// namespace azalea
 
 #endif// AZALEA_EVENT_HPP

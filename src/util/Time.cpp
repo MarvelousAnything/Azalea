@@ -15,18 +15,13 @@ azalea::util::time::Stopwatch::Stopwatch( const azalea::util::time::Stopwatch& s
     this->m_endTime = stopwatch.m_endTime;
 }
 
-void azalea::util::time::Stopwatch::start()
-{
-    this->m_startTime = glfwGetTime();
-}
+void azalea::util::time::Stopwatch::start() { this->m_startTime = glfwGetTime(); }
 
-void azalea::util::time::Stopwatch::end()
-{
-    this->m_endTime = glfwGetTime();
-}
+void azalea::util::time::Stopwatch::end() { this->m_endTime = glfwGetTime(); }
 
-double azalea::util::time::Stopwatch::elapsed() {
-    if (this->m_endTime == -1) {
+double azalea::util::time::Stopwatch::elapsed()
+{
+    if ( this->m_endTime == -1 ) {
         return glfwGetTime() - this->m_startTime;
     }
     return this->m_endTime - glfwGetTime();

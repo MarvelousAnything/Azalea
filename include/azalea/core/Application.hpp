@@ -6,7 +6,8 @@
 
 namespace azalea {
 
-    struct ApplicationProps {
+    struct ApplicationProps
+    {
 
         uint32_t width;
         uint32_t height;
@@ -14,26 +15,25 @@ namespace azalea {
         std::string name = "Made with Azalea";
 
         bool vsync = true;
-
     };
 
     class AzaleaApplication {
     public:
-        AzaleaApplication(ApplicationProps& applicationProps);
+        AzaleaApplication( ApplicationProps& applicationProps );
         ~AzaleaApplication();
 
-        void run(); // backend run function to make things work
+        void run();// backend run function to make things work
 
         static AzaleaApplication* getInstance();
-    private:
 
+    private:
         ApplicationProps& m_applicationProps;
 
         static AzaleaApplication* s_instance;
     };
 
-    AzaleaApplication* instantiateAzaleaApplication(int32_t argc, const char** argv);
+    AzaleaApplication* instantiateAzaleaApplication( int32_t argc, const char** argv );
 
-}
+}// namespace azalea
 
 #endif// AZALEA_APPLICATION_HPP

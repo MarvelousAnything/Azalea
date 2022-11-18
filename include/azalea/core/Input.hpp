@@ -6,13 +6,13 @@
 
 namespace azalea {
 
-    bool isKeyPressed(KeyCode keyCode);
-    bool isKeyDown(KeyCode keyCode);
-    bool isKeyReleased(KeyCode keyCode);
+    bool isKeyPressed( KeyCode keyCode );
+    bool isKeyDown( KeyCode keyCode );
+    bool isKeyReleased( KeyCode keyCode );
 
-    bool isMouseButtonPressed(MouseButton mouseButton);
-    bool isMouseButtonDown(MouseButton mouseButton);
-    bool isMouseButtonReleased(MouseButton mouseButton);
+    bool isMouseButtonPressed( MouseButton mouseButton );
+    bool isMouseButtonDown( MouseButton mouseButton );
+    bool isMouseButtonReleased( MouseButton mouseButton );
 
 }// namespace azalea
 

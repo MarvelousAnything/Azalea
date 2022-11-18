@@ -1,15 +1,15 @@
 #ifndef AZALEA_TIME_HPP
 #define AZALEA_TIME_HPP
 
-#include <cstdint>
 #include <chrono>
+#include <cstdint>
 
 namespace azalea::util::time {
 
     class Stopwatch {
     public:
         Stopwatch();
-        Stopwatch(const Stopwatch& stopwatch);
+        Stopwatch( const Stopwatch& stopwatch );
 
         ~Stopwatch() = default;
 
@@ -23,6 +23,6 @@ namespace azalea::util::time {
         double m_endTime;
     };
 
-}
+}// namespace azalea::util::time
 
 #endif// AZALEA_TIME_HPP
