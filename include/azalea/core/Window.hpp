@@ -4,7 +4,7 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <string>
-#include <vector>
+#include <map>
 
 #include <azalea/core/Events.hpp>
 
@@ -25,10 +25,18 @@ namespace azalea {
         AzaleaWindow( WindowProps& windowProps );
         ~AzaleaWindow();
 
+        void show();
+        void hide();
+
+        void forceFocus();
+        void requestAttention();
+
         void setWindowSize( uint32_t width, uint32_t height );
 
         float getAspectRatio();
         bool isMinimized();
+
+        bool shouldClose();
 
         operator GLFWwindow*();
 
@@ -39,6 +47,7 @@ namespace azalea {
         float m_aspectRatio;
 
         bool m_minimized;
+        bool m_shown;
         bool m_vsync;
 
         GLFWwindow* m_glfwWindow;

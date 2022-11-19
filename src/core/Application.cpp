@@ -15,10 +15,19 @@ azalea::AzaleaApplication::AzaleaApplication( azalea::ApplicationProps& applicat
     this->m_window = new AzaleaWindow(props);
 }
 
-azalea::AzaleaApplication::~AzaleaApplication() {}
+azalea::AzaleaApplication::~AzaleaApplication()
+{
+    delete this->m_window;
+}
 
 azalea::AzaleaWindow* azalea::AzaleaApplication::getWindow() { return this->m_window; }
 
 azalea::AzaleaApplication* azalea::AzaleaApplication::getInstance() { return AzaleaApplication::s_instance; }
 
-void azalea::AzaleaApplication::run() { std::cout << "Hello, World!\n"; }
+void azalea::AzaleaApplication::run()
+{
+    while (!this->m_window->shouldClose()) {
+
+        glfwPollEvents();
+    }
+}
