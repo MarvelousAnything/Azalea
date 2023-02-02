@@ -1,0 +1,4 @@
+#ifndef AZALEA_EVENT_HPP
+#define AZALEA_EVENT_HPP
+
+#endif //AZALEA_EVENT_HPP
