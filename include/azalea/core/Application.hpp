@@ -1,6 +1,7 @@
 #ifndef AZALEA_APPLICATION_HPP
 #define AZALEA_APPLICATION_HPP
 
+#include <azalea/core/Window.hpp>
 #include <stdint.h>
 #include <string>
 
@@ -20,14 +21,22 @@ namespace azalea {
 
     class AzaleaApplication {
     public:
-        AzaleaApplication( ApplicationProps& props );
-        ~AzaleaApplication();
+        AzaleaApplication( ApplicationProps props );
+        ~AzaleaApplication() = default;// TODO (Chloe): Remember to do this
 
         void run();
 
-    private:
+        AzaleaWindowManager* getWindowManager();
 
+        static AzaleaApplication* getInstance();
+
+    private:
         std::string m_name;
+        bool m_running;
+
+        AzaleaWindowManager* m_windowManager;
+
+        static AzaleaApplication* s_instance;
     };
 
 

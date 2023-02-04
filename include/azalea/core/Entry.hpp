@@ -1,7 +1,8 @@
 #ifndef AZALEA_ENTRY_HPP
 #define AZALEA_ENTRY_HPP
 
-#include <azalea/core/Application.hpp>
+
+#include "Application.hpp"
 
 extern azalea::AzaleaApplication* azalea::createApplication( int argc, const char** argv );
 
