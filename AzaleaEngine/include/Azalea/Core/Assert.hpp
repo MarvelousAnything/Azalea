@@ -1,0 +1,4 @@
+#ifndef AZALEA_ASSERT_HPP
+#define AZALEA_ASSERT_HPP
+
+#endif// AZALEA_ASSERT_HPP
