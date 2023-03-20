@@ -6,6 +6,6 @@
 #define AZALEA_MAX(x, y) (x < y) ? y : x
 #define AZALEA_MIN(x, y) (x < y) ? x : y
 
-#define AZALEA_ABS(x) x < 0 ? -x : x;
+#define AZALEA_ABS(x) x < 0 ? (-x) : x
 
 #endif// AZALEA_MACROS_HPP
