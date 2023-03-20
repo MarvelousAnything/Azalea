@@ -37,21 +37,82 @@ azalea::window::WindowsWindow::WindowsWindow( azalea::window::AzaleaWindow* pare
     if ( parent != nullptr ) {
         parentHandle = ( ( WindowsWindow* ) parent )->m_handle;
     }
-    this->m_handle =
-            CreateWindow( ( LPSTR ) AZALEA_MAIN_CLASS_NAME, opts.title.c_str(),
-                          WS_OVERLAPPEDWINDOW /* This might need changing depending on what preferences the
-                                                 user has in terms of winodw mode */
-                          ,
-                          CW_USEDEFAULT, CW_USEDEFAULT, opts.width, opts.height, parentHandle, NULL, s_hinstance, NULL );
+
+    int32_t windowWidth = opts.width;
+    int32_t windowHeight = opts.height;
+
+    if ( opts.windowMode == AzaleaWindowMode::BORDERLESS_WINDOW ) {
+        // this is done to calculate the window size for borderless window since that is how it works :)
+        windowWidth = GetSystemMetrics( SM_CXSCREEN );
+        windowHeight = GetSystemMetrics( SM_CYSCREEN );
+    }
+
+    this->m_handle = CreateWindow( ( LPSTR ) AZALEA_MAIN_CLASS_NAME, opts.title.c_str(),
+                                   windowModeToWindowsStyle( opts.windowMode ) /* This might need changing depending on
+                                                            what preferences the user has in terms of winodw mode */
+                                   ,
+                                   CW_USEDEFAULT, CW_USEDEFAULT, windowWidth, windowHeight, parentHandle, NULL,
+                                   s_hinstance, NULL );
     if ( this->m_handle == nullptr ) {
         // error
         printf( "Window Failed to create\n" );
         printf( "%lu\n", GetLastError() );
     }
 }
-void azalea::window::WindowsWindow::show() { ShowWindow( this->m_handle, SW_NORMAL ); }
+
+azalea::window::WindowsWindow::~WindowsWindow()
+{
+    AzaleaWindow::~AzaleaWindow();
+    DestroyWindow( this->m_handle );
+}
+
+void azalea::window::WindowsWindow::show()
+{
+    if ( this->getMode() == AzaleaWindowMode::FULLSCREEN ) {
+        ShowWindow( this->m_handle, SW_MAXIMIZE );
+    }
+    else {
+        ShowWindow( this->m_handle, SW_NORMAL );
+    }
+}
 
 void azalea::window::WindowsWindow::hide() { ShowWindow( this->m_handle, SW_HIDE ); }
 
 azalea::window::WindowsWindow::WindowsWindow( azalea::window::AzaleaWindowOptions opts ) : WindowsWindow( nullptr, opts )
 {}
+
+void azalea::window::WindowsWindow::setWidth( int32_t width )
+{
+    AzaleaWindow::setWidth( width );
+    SetWindowPos( this->m_handle, nullptr, 0, 0, width, this->getHeight(), SWP_NOMOVE | SWP_SHOWWINDOW );
+}
+
+void azalea::window::WindowsWindow::setHeight( int32_t height )
+{
+    AzaleaWindow::setHeight( height );
+    SetWindowPos( this->m_handle, nullptr, 0, 0, this->getWidth(), height, SWP_NOMOVE | SWP_SHOWWINDOW );
+}
+
+void azalea::window::WindowsWindow::setWindowMode( azalea::window::AzaleaWindowMode mode )
+{
+    AzaleaWindow::setWindowMode( mode );
+    SetWindowLongPtr( this->m_handle, GWL_STYLE, windowModeToWindowsStyle( mode ) );
+    SetWindowPos( this->m_handle, HWND_TOPMOST, 100, 100, this->getWidth(), this->getHeight(), SWP_SHOWWINDOW );
+}
+void azalea::window::WindowsWindow::setTitle( std::string title )
+{
+    AzaleaWindow::setTitle( title );
+    SetWindowText( this->m_handle, title.c_str() );
+}
+
+int32_t azalea::window::windowModeToWindowsStyle( azalea::window::AzaleaWindowMode mode )
+{
+    switch ( mode ) {
+        case AzaleaWindowMode::FULLSCREEN:
+            return WS_MAXIMIZE;
+        case AzaleaWindowMode::BORDERLESS_WINDOW:
+            return WS_POPUP;
+        case AzaleaWindowMode::WINDOWED:
+            return WS_OVERLAPPEDWINDOW;
+    }
+}

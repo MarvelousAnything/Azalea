@@ -13,6 +13,8 @@ public:
                                                      .windowMode = azalea::window::AzaleaWindowMode::FULLSCREEN };
         auto* win = new azalea::window::WindowsWindow( opts );
         win->show();
+        while ( 1 )
+            ;
     }
 };
 

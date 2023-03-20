@@ -14,10 +14,15 @@ namespace azalea::window {
 
     public:
         WindowsWindow( AzaleaWindowOptions opts );
-        ~WindowsWindow();
+        ~WindowsWindow() override;// I have no idea if this is a good idea...
 
         void show() override;
         void hide() override;
+
+        void setWidth( int32_t width ) override;
+        void setHeight( int32_t height ) override;
+        void setWindowMode( AzaleaWindowMode mode ) override;
+        void setTitle( std::string title ) override;
 
     private:
         WindowsWindow( AzaleaWindow* parent, AzaleaWindowOptions opts );
@@ -28,6 +33,8 @@ namespace azalea::window {
 
         HWND m_handle;
     };
+
+    int32_t windowModeToWindowsStyle( AzaleaWindowMode mode );
 
 }// namespace azalea::window
 

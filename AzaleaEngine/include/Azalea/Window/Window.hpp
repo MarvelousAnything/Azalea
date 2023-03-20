@@ -23,14 +23,18 @@ namespace azalea::window {
 
         std::string title = "Azalea Window";
 
-        AzaleaWindowMode windowMode = AzaleaWindowMode::WINDOW;
+        AzaleaWindowMode windowMode = AzaleaWindowMode::WINDOWED;
         bool vsync = true;
     };
 
+    // Putting this here because it is for the window and I currently don't have good access to Trello... oops!
+    // TODO(Chloe): Setting window icon
+    // TODO(Chloe): Setting window cursor
+    // TODO(Chloe): Minimizing window
     class AzaleaWindow {
     public:
         AzaleaWindow( AzaleaWindowOptions opts );
-        ~AzaleaWindow();
+        virtual ~AzaleaWindow();
 
 
         virtual void show();
@@ -38,6 +42,30 @@ namespace azalea::window {
 
         AzaleaWindow* createChildWindow( AzaleaWindowOptions opts );
 
+        virtual void setWidth( int32_t width );
+        int32_t getWidth();
+
+        virtual void setHeight( int32_t height );
+        int32_t getHeight();
+
+        virtual void setWindowMode( AzaleaWindowMode mode );
+        AzaleaWindowMode getMode();
+
+        virtual void setTitle( std::string title );
+        std::string getTitle();
+
+        /*
+         * These methods require a graphics library loaded.
+         * The functionality these methods give will be implemented when a graphics library -- either OpenGL or Vulcan --
+         * get implemented.
+         *
+         * For more info visit: https://www.khronos.org/opengl/wiki/Swap_Interval
+         *
+         * virtual void setVSync(bool vsync);
+         * bool isVSyncEnabled();
+         *
+         * virtual void swapBuffers();
+         */
     protected:
         AzaleaWindow( AzaleaWindow* parent, AzaleaWindowOptions opts );
 
@@ -46,13 +74,14 @@ namespace azalea::window {
         std::vector<AzaleaWindow*> m_children;
 
     private:
-        int32_t m_width;// TODO(Chloe) change width and height of window
+        int32_t m_width;
         int32_t m_height;
 
-        AzaleaWindowMode m_windowMode;// TODO(Chloe) Get window mode working
-        bool m_vsyncEnabled;          // TODO(Chloe) Get VSync working
+        AzaleaWindowMode m_windowMode;
+        bool m_vsyncEnabled;// TODO(Chloe) Get VSync working (This is not possible right now see comment on starting on
+                            // line 58)
 
-        std::string m_title;// TODO(Chloe) Change Window Title
+        std::string m_title;
     };
 
 }// namespace azalea::window
