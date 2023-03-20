@@ -11,7 +11,7 @@ int main(int argc, char** argv)
     gamer->run();
     delete gamer;
 
-    return 0xc0000374;
+    return 0; // this actually confused me xd
 }
 
 #endif// AZALEA_ENTRY_HPP

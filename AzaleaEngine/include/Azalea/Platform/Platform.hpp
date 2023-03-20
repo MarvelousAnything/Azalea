@@ -9,7 +9,14 @@
 #define AZALEA_PLATFORM_LINUX
 #else
 #error "Unknown or Unsupported Platform"
-#endif
+#endif // If defined WIN32 ...
+
+#endif // If not defined AZALEA_PLATFORM_WINDOWS ...
+
+#ifdef AZALEA_PLATFORM_WINDOWS
+// Windows Includes
+
+#include <Azalea/Platform/Windows/WindowsWindow.hpp>
 
 #endif
 
