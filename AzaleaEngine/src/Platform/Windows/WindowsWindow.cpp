@@ -68,12 +68,9 @@ azalea::window::WindowsWindow::~WindowsWindow()
 
 void azalea::window::WindowsWindow::show()
 {
-    if ( this->getMode() == AzaleaWindowMode::FULLSCREEN ) {
-        ShowWindow( this->m_handle, SW_MAXIMIZE );
-    }
-    else {
-        ShowWindow( this->m_handle, SW_NORMAL );
-    }
+
+    ShowWindow( this->m_handle, SW_NORMAL );
+    UpdateWindow(this->m_handle);
 }
 
 void azalea::window::WindowsWindow::hide() { ShowWindow( this->m_handle, SW_HIDE ); }
@@ -109,10 +106,11 @@ int32_t azalea::window::windowModeToWindowsStyle( azalea::window::AzaleaWindowMo
 {
     switch ( mode ) {
         case AzaleaWindowMode::FULLSCREEN:
-            return WS_MAXIMIZE;
-        case AzaleaWindowMode::BORDERLESS_WINDOW:
             return WS_POPUP;
+        case AzaleaWindowMode::BORDERLESS_WINDOW:
+            return WS_MAXIMIZE;
         case AzaleaWindowMode::WINDOWED:
             return WS_OVERLAPPEDWINDOW;
     }
+    return 0;
 }

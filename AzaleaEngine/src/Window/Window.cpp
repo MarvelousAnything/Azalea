@@ -44,7 +44,7 @@ void azalea::window::AzaleaWindow::setHeight( int32_t height ) { this->m_height 
 
 int32_t azalea::window::AzaleaWindow::getHeight() { return this->m_height; }
 
-void azalea::window::AzaleaWindow::setWidth( int32_t width ){ this->m_width = width }
+void azalea::window::AzaleaWindow::setWidth( int32_t width ){ this->m_width = width; }
 
 int32_t azalea::window::AzaleaWindow::getWidth()
 {
