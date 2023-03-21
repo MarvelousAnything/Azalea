@@ -39,6 +39,7 @@ namespace azalea::window {
 
         virtual void show();
         virtual void hide();
+        virtual void poll();
 
         AzaleaWindow* createChildWindow( AzaleaWindowOptions opts );
 
@@ -53,6 +54,8 @@ namespace azalea::window {
 
         virtual void setTitle( std::string title );
         std::string getTitle();
+
+        virtual void* getNativeWindowHandle();
 
         /*
          * These methods require a graphics library loaded.

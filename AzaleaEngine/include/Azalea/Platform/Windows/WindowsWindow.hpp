@@ -18,11 +18,14 @@ namespace azalea::window {
 
         void show() override;
         void hide() override;
+        void poll() override;
 
         void setWidth( int32_t width ) override;
         void setHeight( int32_t height ) override;
         void setWindowMode( AzaleaWindowMode mode ) override;
         void setTitle( std::string title ) override;
+
+        void* getNativeWindowHandle() override;
 
     private:
         WindowsWindow( AzaleaWindow* parent, AzaleaWindowOptions opts );

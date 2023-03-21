@@ -102,6 +102,16 @@ void azalea::window::WindowsWindow::setTitle( std::string title )
     SetWindowText( this->m_handle, title.c_str() );
 }
 
+void azalea::window::WindowsWindow::poll()
+{
+    MSG msg;
+    if (GetMessage(&msg, this->m_handle, NULL, NULL) > 0) {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+}
+void* azalea::window::WindowsWindow::getNativeWindowHandle() { return (void*) this->m_handle; }
+
 int32_t azalea::window::windowModeToWindowsStyle( azalea::window::AzaleaWindowMode mode )
 {
     switch ( mode ) {

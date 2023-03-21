@@ -10,11 +10,12 @@ public:
     {
         azalea::window::AzaleaWindowOptions opts = { .width = 720,
                                                      .height = 720,
-                                                     .windowMode = azalea::window::AzaleaWindowMode::FULLSCREEN };
+                                                     .windowMode = azalea::window::AzaleaWindowMode::WINDOWED };
         auto* win = new azalea::window::WindowsWindow( opts );
         win->show();
-        while ( 1 )
-            ;
+        while (true) {
+            win->poll();
+        }
     }
 };
 
