@@ -13,7 +13,7 @@ public:
                                                      .windowMode = azalea::window::AzaleaWindowMode::WINDOWED };
         auto* win = new azalea::window::WindowsWindow( opts );
         win->show();
-        while (true) {
+        while ( true ) {
             win->poll();
         }
     }

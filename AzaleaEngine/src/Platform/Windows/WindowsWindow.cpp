@@ -70,7 +70,7 @@ void azalea::window::WindowsWindow::show()
 {
 
     ShowWindow( this->m_handle, SW_NORMAL );
-    UpdateWindow(this->m_handle);
+    UpdateWindow( this->m_handle );
 }
 
 void azalea::window::WindowsWindow::hide() { ShowWindow( this->m_handle, SW_HIDE ); }
@@ -105,12 +105,12 @@ void azalea::window::WindowsWindow::setTitle( std::string title )
 void azalea::window::WindowsWindow::poll()
 {
     MSG msg;
-    if (GetMessage(&msg, this->m_handle, NULL, NULL) > 0) {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
+    if ( GetMessage( &msg, this->m_handle, NULL, NULL ) > 0 ) {
+        TranslateMessage( &msg );
+        DispatchMessage( &msg );
     }
 }
-void* azalea::window::WindowsWindow::getNativeWindowHandle() { return (void*) this->m_handle; }
+void* azalea::window::WindowsWindow::getNativeWindowHandle() { return ( void* ) this->m_handle; }
 
 int32_t azalea::window::windowModeToWindowsStyle( azalea::window::AzaleaWindowMode mode )
 {
