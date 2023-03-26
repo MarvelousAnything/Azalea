@@ -2,8 +2,14 @@
 #define AZALEA_APPLICATION_HPP
 
 #include <Azalea/Core/Logger.hpp>
+#include <Azalea/Window/Window.hpp>
 
 namespace azalea {
+
+    struct PlatformInfo
+    {
+        std::string platformName;
+    };
 
     /**
      * @brief The application framework for Azalea
@@ -24,18 +30,23 @@ namespace azalea {
          * @brief Runs all of the game's core logic such as the render loop and handling physics
          * @internal The end-user should NOT UNDER NO CIRCUMSTANCES call this method it is for internal use only
          */
-        void run();
+        virtual void run();
 
         /**
          * @brief Gets the application framework singleton
          * @return the AzaleaApplication singleton
          */
         static AzaleaApplication* get();
+
+        void setPlatformInfo(PlatformInfo* info);
+
         /**
          * @brief Gets the main logger
          * @return the main logger
          */
         StandardOutputLogger* getLogger();
+
+        PlatformInfo* getPlatformInfo();
 
     private:
         static AzaleaApplication* s_instance;
@@ -43,6 +54,8 @@ namespace azalea {
         std::string m_name;
 
         StandardOutputLogger* m_logger; // TODO(Chloe): Change this to FileLogger when the logging path gets fixed
+
+        PlatformInfo* m_platform;
     };
 
     /**

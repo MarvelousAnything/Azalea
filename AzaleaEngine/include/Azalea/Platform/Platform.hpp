@@ -17,6 +17,7 @@
 // Windows Includes
 
 #include <Azalea/Platform/Windows/WindowsWindow.hpp>
+#include <Azalea/Platform/Windows/WindowsPlatformUtil.hpp>
 
 #endif
 

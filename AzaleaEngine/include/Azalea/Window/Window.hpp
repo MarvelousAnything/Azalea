@@ -27,10 +27,7 @@ namespace azalea::window {
         bool vsync = true;
     };
 
-    // Putting this here because it is for the window and I currently don't have good access to Trello... oops!
-    // TODO(Chloe): Setting window icon
-    // TODO(Chloe): Setting window cursor
-    // TODO(Chloe): Minimizing window
+
     class AzaleaWindow {
     public:
         AzaleaWindow( AzaleaWindowOptions opts );
@@ -42,6 +39,9 @@ namespace azalea::window {
         virtual void poll();
 
         AzaleaWindow* createChildWindow( AzaleaWindowOptions opts );
+
+
+        bool shouldClose();
 
         virtual void setWidth( int32_t width );
         int32_t getWidth();
@@ -76,14 +76,15 @@ namespace azalea::window {
         int32_t m_childID;
         std::vector<AzaleaWindow*> m_children;
 
+        bool m_shouldClose;
+
     private:
         int32_t m_width;
-        int32_t m_height;
 
+        int32_t m_height;
         AzaleaWindowMode m_windowMode;
         bool m_vsyncEnabled;// TODO(Chloe) Get VSync working (This is not possible right now see comment on starting on
                             // line 58)
-
         std::string m_title;
     };
 

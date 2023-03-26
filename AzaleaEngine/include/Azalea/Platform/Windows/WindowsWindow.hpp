@@ -1,44 +1,43 @@
 #ifndef AZALEA_WINDOWSWINDOW_HPP
 #define AZALEA_WINDOWSWINDOW_HPP
 
+#include <Azalea/Platform/Windows/WindowsPlatformUtil.hpp>
 #include <Azalea/Window/Window.hpp>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <winuser.h>
+// HACK: I need to get the application instance, but it's a cyclic include soooo
+namespace azalea {
+    class AzaleaApplication;
+}
 
 namespace azalea::window {
-
     class WindowsWindow : public AzaleaWindow {
         friend class AzaleaWindow;
-
     public:
-        WindowsWindow( AzaleaWindowOptions opts );
-        ~WindowsWindow() override;// I have no idea if this is a good idea...
+        WindowsWindow(AzaleaWindowOptions opts);
+        ~WindowsWindow() override;
 
         void show() override;
         void hide() override;
         void poll() override;
 
-        void setWidth( int32_t width ) override;
-        void setHeight( int32_t height ) override;
-        void setWindowMode( AzaleaWindowMode mode ) override;
-        void setTitle( std::string title ) override;
+        void setWidth(int32_t width) override {};
+        void setHeight(int32_t height) override {};
+        void setWindowMode(AzaleaWindowMode mode) override;
+        void setTitle( std::string title ) override {};
 
-        void* getNativeWindowHandle() override;
+        void* getNativeWindowHandle() override {};
 
     private:
-        WindowsWindow( AzaleaWindow* parent, AzaleaWindowOptions opts );
+        WindowsWindow(WindowsWindow* window, AzaleaWindowOptions options);
+        void m_internalApplyWindowForm(AzaleaWindowMode mode, bool startup);
 
-        static WNDCLASS s_windowClass;
-        static LRESULT CALLBACK s_windowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-        static HINSTANCE s_hinstance;
+        void maximizeWindow(); // this has to move
 
-        HWND m_handle;
+        HWND m_windowHandle;
+
     };
+}
 
-    int32_t windowModeToWindowsStyle( AzaleaWindowMode mode );
-
-}// namespace azalea::window
+#include <Azalea/Core/Application.hpp>
 
 #endif// AZALEA_WINDOWSWINDOW_HPP

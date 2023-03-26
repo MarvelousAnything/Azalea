@@ -13,7 +13,11 @@ azalea::AzaleaApplication::AzaleaApplication( std::string applicationName )
 azalea::AzaleaApplication::~AzaleaApplication() { delete this->m_logger; }
 
 #include <iostream>
+#include <utility>
 void azalea::AzaleaApplication::run() { std::cout << "Basic Logic\n"; }
+
+void azalea::AzaleaApplication::setPlatformInfo( azalea::PlatformInfo* info ) { this->m_platform = info; }
 
 azalea::AzaleaApplication* azalea::AzaleaApplication::get() { return AzaleaApplication::s_instance; }
 azalea::StandardOutputLogger* azalea::AzaleaApplication::getLogger() { return this->m_logger; }
+azalea::PlatformInfo* azalea::AzaleaApplication::getPlatformInfo() { return this->m_platform; }

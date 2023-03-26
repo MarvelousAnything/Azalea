@@ -1,126 +1,109 @@
+#include <Azalea/Platform/Windows/WindowsPlatformUtil.hpp>
 #include <Azalea/Platform/Windows/WindowsWindow.hpp>
 
-#define AZALEA_MAIN_CLASS_NAME "AzaleaWindow"
+#define AZALEA_CLASS_NAME "AzaleaWindowClass"
 
-WNDCLASS azalea::window::WindowsWindow::s_windowClass = { 0 };
-HINSTANCE azalea::window::WindowsWindow::s_hinstance = nullptr;
-LRESULT CALLBACK azalea::window::WindowsWindow::s_windowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
-{
-    return 0;
-}
-
-azalea::window::WindowsWindow::WindowsWindow( azalea::window::AzaleaWindow* parent,
+azalea::window::WindowsWindow::WindowsWindow( azalea::window::WindowsWindow* window,
                                               azalea::window::AzaleaWindowOptions opts )
-    : AzaleaWindow( parent, opts )
+    : AzaleaWindow( window, opts )
 {
-    if ( s_hinstance == nullptr ) {
-        s_hinstance = GetModuleHandle( nullptr );
+    auto* platformInfo = ( WindowsPlatformInfo* ) azalea::AzaleaApplication::get()->getPlatformInfo();
+    if ( !platformInfo->registeredWindowClass ) {
+        WNDCLASS windowClass = { 0 };
+        windowClass.style = CS_BYTEALIGNWINDOW | CS_HREDRAW | CS_VREDRAW;
+        windowClass.lpfnWndProc = DefWindowProc;
+        windowClass.cbClsExtra = 0;
+        windowClass.cbWndExtra = 0;
+        windowClass.hInstance = platformInfo->hinstance;
+        windowClass.hIcon = nullptr;
+        windowClass.hCursor = LoadCursor( nullptr, IDC_ARROW );
+        windowClass.hbrBackground = nullptr;
+        windowClass.lpszMenuName = nullptr;
+        windowClass.lpszClassName = AZALEA_CLASS_NAME;
 
-        s_windowClass = { 0 };
-        s_windowClass.style = CS_BYTEALIGNWINDOW | CS_HREDRAW | CS_VREDRAW;
-        s_windowClass.lpfnWndProc = DefWindowProc;
-        s_windowClass.cbClsExtra = 0;
-        s_windowClass.cbWndExtra = 0;
-        s_windowClass.hInstance = s_hinstance;
-        s_windowClass.hIcon = nullptr;
-        s_windowClass.hCursor = LoadCursor( NULL, IDC_ARROW );
-        s_windowClass.hbrBackground = NULL;
-        s_windowClass.lpszMenuName = 0;
-        s_windowClass.lpszClassName = AZALEA_MAIN_CLASS_NAME;
-
-        if ( !RegisterClass( &s_windowClass ) ) {
-            printf( "Error when creating window class\n" );
+        if ( !RegisterClass( &windowClass ) ) {
+            azalea::AzaleaApplication::get()->getLogger()->error( LogErrorType::GENERIC_ERROR,
+                                                                  "Failed to create the Azalea Window Class\n" );
+        }
+        else {
+            platformInfo->registeredWindowClass = true;
         }
     }
-
-    HWND parentHandle = nullptr;
-    if ( parent != nullptr ) {
-        parentHandle = ( ( WindowsWindow* ) parent )->m_handle;
+    HWND parentWindowHandle = nullptr;
+    if ( window ) {
+        parentWindowHandle = window->m_windowHandle;
     }
 
-    int32_t windowWidth = opts.width;
-    int32_t windowHeight = opts.height;
 
-    if ( opts.windowMode == AzaleaWindowMode::BORDERLESS_WINDOW ) {
-        // this is done to calculate the window size for borderless window since that is how it works :)
-        windowWidth = GetSystemMetrics( SM_CXSCREEN );
-        windowHeight = GetSystemMetrics( SM_CYSCREEN );
-    }
+    this->m_windowHandle =
+            CreateWindowEx( 0, AZALEA_CLASS_NAME, opts.title.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+                            opts.width, opts.height, parentWindowHandle, nullptr, platformInfo->hinstance, nullptr );
 
-    this->m_handle = CreateWindow( ( LPSTR ) AZALEA_MAIN_CLASS_NAME, opts.title.c_str(),
-                                   windowModeToWindowsStyle( opts.windowMode ) /* This might need changing depending on
-                                                            what preferences the user has in terms of winodw mode */
-                                   ,
-                                   CW_USEDEFAULT, CW_USEDEFAULT, windowWidth, windowHeight, parentHandle, NULL,
-                                   s_hinstance, NULL );
-    if ( this->m_handle == nullptr ) {
-        // error
-        printf( "Window Failed to create\n" );
-        printf( "%lu\n", GetLastError() );
+    this->m_internalApplyWindowForm( opts.windowMode, true );
+
+    if ( this->m_windowHandle == nullptr ) {
+        azalea::AzaleaApplication::get()->getLogger()->error(
+                LogErrorType::GENERIC_ERROR, "Failed to create the Azalea Window. Error Code: %lu\n", GetLastError() );
     }
 }
 
-azalea::window::WindowsWindow::~WindowsWindow()
+azalea::window::WindowsWindow::WindowsWindow( AzaleaWindowOptions opts ) : WindowsWindow( nullptr, opts ) {}
+
+azalea::window::WindowsWindow::~WindowsWindow() { DestroyWindow( this->m_windowHandle ); }
+
+void azalea::window::WindowsWindow::maximizeWindow()
 {
-    AzaleaWindow::~AzaleaWindow();
-    DestroyWindow( this->m_handle );
+    MONITORINFO info = { sizeof( info ) };
+    GetMonitorInfo( MonitorFromWindow( this->m_windowHandle, MONITOR_DEFAULTTONEAREST ), &info );
+
+    RECT rect = info.rcWork;
+
+    int32_t windowStyle = GetWindowLong( this->m_windowHandle, GWL_STYLE );
+    windowStyle |= WS_MAXIMIZE;
+    SetWindowLong( this->m_windowHandle, GWL_STYLE, windowStyle );
+
+    SetWindowPos( this->m_windowHandle, HWND_TOP, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
+                  SWP_NOACTIVATE | SWP_NOZORDER | SWP_FRAMECHANGED );
 }
 
-void azalea::window::WindowsWindow::show()
+void azalea::window::WindowsWindow::show() { ShowWindow( this->m_windowHandle, SW_SHOWNA ); }
+
+void azalea::window::WindowsWindow::m_internalApplyWindowForm( azalea::window::AzaleaWindowMode mode, bool startup )
 {
+    switch ( mode ) {
 
-    ShowWindow( this->m_handle, SW_NORMAL );
-    UpdateWindow( this->m_handle );
-}
-
-void azalea::window::WindowsWindow::hide() { ShowWindow( this->m_handle, SW_HIDE ); }
-
-azalea::window::WindowsWindow::WindowsWindow( azalea::window::AzaleaWindowOptions opts ) : WindowsWindow( nullptr, opts )
-{}
-
-void azalea::window::WindowsWindow::setWidth( int32_t width )
-{
-    AzaleaWindow::setWidth( width );
-    SetWindowPos( this->m_handle, nullptr, 0, 0, width, this->getHeight(), SWP_NOMOVE | SWP_SHOWWINDOW );
-}
-
-void azalea::window::WindowsWindow::setHeight( int32_t height )
-{
-    AzaleaWindow::setHeight( height );
-    SetWindowPos( this->m_handle, nullptr, 0, 0, this->getWidth(), height, SWP_NOMOVE | SWP_SHOWWINDOW );
+        case AzaleaWindowMode::FULLSCREEN:
+            SetWindowLong( this->m_windowHandle, GWL_STYLE, WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS );
+            SetWindowPos( this->m_windowHandle, HWND_TOPMOST, 0, 0, GetSystemMetrics( SM_CXSCREEN ),
+                          GetSystemMetrics( SM_CYSCREEN ), SWP_FRAMECHANGED );
+            break;
+        case AzaleaWindowMode::WINDOWED_FULLSCREEN:
+            SetWindowLong( this->m_windowHandle, GWL_STYLE, WS_POPUP | WS_VISIBLE );
+            SetWindowPos( this->m_windowHandle, HWND_TOPMOST, 0, 0, GetSystemMetrics( SM_CXSCREEN ),
+                          GetSystemMetrics( SM_CYSCREEN ), SWP_FRAMECHANGED );
+            break;
+        case AzaleaWindowMode::WINDOWED:
+            if ( startup ) {
+                break;
+            }
+            SetWindowLong( this->m_windowHandle, GWL_STYLE, WS_OVERLAPPEDWINDOW );
+            SetWindowPos( this->m_windowHandle, HWND_TOPMOST, CW_USEDEFAULT, CW_USEDEFAULT, this->getWidth(),
+                          this->getHeight(), SWP_FRAMECHANGED );
+    }
 }
 
 void azalea::window::WindowsWindow::setWindowMode( azalea::window::AzaleaWindowMode mode )
 {
-    AzaleaWindow::setWindowMode( mode );
-    SetWindowLongPtr( this->m_handle, GWL_STYLE, windowModeToWindowsStyle( mode ) );
-    SetWindowPos( this->m_handle, HWND_TOPMOST, 100, 100, this->getWidth(), this->getHeight(), SWP_SHOWWINDOW );
+    this->m_internalApplyWindowForm( mode, false );
 }
-void azalea::window::WindowsWindow::setTitle( std::string title )
-{
-    AzaleaWindow::setTitle( title );
-    SetWindowText( this->m_handle, title.c_str() );
-}
-
 void azalea::window::WindowsWindow::poll()
 {
-    MSG msg;
-    if ( GetMessage( &msg, this->m_handle, NULL, NULL ) > 0 ) {
-        TranslateMessage( &msg );
-        DispatchMessage( &msg );
+    MSG message;
+    if ( GetMessage( &message, this->m_windowHandle, 0, 0 ) <= 0 ) {
+        this->m_shouldClose = true;
     }
+    TranslateMessage( &message );
+    DispatchMessage( &message );
 }
-void* azalea::window::WindowsWindow::getNativeWindowHandle() { return ( void* ) this->m_handle; }
 
-int32_t azalea::window::windowModeToWindowsStyle( azalea::window::AzaleaWindowMode mode )
-{
-    switch ( mode ) {
-        case AzaleaWindowMode::FULLSCREEN:
-            return WS_POPUP;
-        case AzaleaWindowMode::BORDERLESS_WINDOW:
-            return WS_MAXIMIZE;
-        case AzaleaWindowMode::WINDOWED:
-            return WS_OVERLAPPEDWINDOW;
-    }
-    return 0;
-}
+void azalea::window::WindowsWindow::hide() { ShowWindow( this->m_windowHandle, SW_HIDE ); }
