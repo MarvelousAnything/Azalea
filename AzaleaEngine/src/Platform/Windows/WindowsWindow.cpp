@@ -49,7 +49,11 @@ azalea::window::WindowsWindow::WindowsWindow( azalea::window::WindowsWindow* win
 
 azalea::window::WindowsWindow::WindowsWindow( AzaleaWindowOptions opts ) : WindowsWindow( nullptr, opts ) {}
 
-azalea::window::WindowsWindow::~WindowsWindow() { DestroyWindow( this->m_windowHandle ); }
+azalea::window::WindowsWindow::~WindowsWindow()
+{
+    AzaleaWindow::~AzaleaWindow();
+    DestroyWindow( this->m_windowHandle );
+}
 
 void azalea::window::WindowsWindow::maximizeWindow()
 {
@@ -92,10 +96,6 @@ void azalea::window::WindowsWindow::m_internalApplyWindowForm( azalea::window::A
     }
 }
 
-void azalea::window::WindowsWindow::setWindowMode( azalea::window::AzaleaWindowMode mode )
-{
-    this->m_internalApplyWindowForm( mode, false );
-}
 void azalea::window::WindowsWindow::poll()
 {
     MSG message;
@@ -107,3 +107,32 @@ void azalea::window::WindowsWindow::poll()
 }
 
 void azalea::window::WindowsWindow::hide() { ShowWindow( this->m_windowHandle, SW_HIDE ); }
+
+void azalea::window::WindowsWindow::setWindowMode( azalea::window::AzaleaWindowMode mode )
+{
+    AzaleaWindow::setWindowMode( mode );
+    this->m_internalApplyWindowForm( mode, false );
+}
+
+void azalea::window::WindowsWindow::setWidth( int32_t width )
+{
+    AzaleaWindow::setWidth( width );
+    SetWindowPos(this->m_windowHandle, 0, 0, width, this->getHeight(), SWP_NOMOVE, SWP_FRAMECHANGED );
+}
+
+void azalea::window::WindowsWindow::setHeight( int32_t height )
+{
+    AzaleaWindow::setHeight( height );
+    SetWindowPos(this->m_windowHandle, 0, 0, this->getWidth(), height, SWP_NOMOVE, SWP_FRAMECHANGED );
+}
+
+void azalea::window::WindowsWindow::setTitle( std::string title )
+{
+    AzaleaWindow::setTitle( title );
+    SetWindowText(this->m_windowHandle, title.c_str());
+}
+
+void* azalea::window::WindowsWindow::getNativeWindowHandle()
+{
+    return this->m_windowHandle;
+}
