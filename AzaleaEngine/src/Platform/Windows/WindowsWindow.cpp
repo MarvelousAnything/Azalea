@@ -108,6 +108,8 @@ void azalea::window::WindowsWindow::poll()
 
 void azalea::window::WindowsWindow::hide() { ShowWindow( this->m_windowHandle, SW_HIDE ); }
 
+void azalea::window::WindowsWindow::requestAttention() { FlashWindow( this->m_windowHandle, false ); }
+
 void azalea::window::WindowsWindow::setWindowMode( azalea::window::AzaleaWindowMode mode )
 {
     AzaleaWindow::setWindowMode( mode );
@@ -117,22 +119,19 @@ void azalea::window::WindowsWindow::setWindowMode( azalea::window::AzaleaWindowM
 void azalea::window::WindowsWindow::setWidth( int32_t width )
 {
     AzaleaWindow::setWidth( width );
-    SetWindowPos(this->m_windowHandle, 0, 0, width, this->getHeight(), SWP_NOMOVE, SWP_FRAMECHANGED );
+    SetWindowPos( this->m_windowHandle, 0, 0, width, this->getHeight(), SWP_NOMOVE, SWP_FRAMECHANGED );
 }
 
 void azalea::window::WindowsWindow::setHeight( int32_t height )
 {
     AzaleaWindow::setHeight( height );
-    SetWindowPos(this->m_windowHandle, 0, 0, this->getWidth(), height, SWP_NOMOVE, SWP_FRAMECHANGED );
+    SetWindowPos( this->m_windowHandle, 0, 0, this->getWidth(), height, SWP_NOMOVE, SWP_FRAMECHANGED );
 }
 
 void azalea::window::WindowsWindow::setTitle( std::string title )
 {
     AzaleaWindow::setTitle( title );
-    SetWindowText(this->m_windowHandle, title.c_str());
+    SetWindowText( this->m_windowHandle, title.c_str() );
 }
 
-void* azalea::window::WindowsWindow::getNativeWindowHandle()
-{
-    return this->m_windowHandle;
-}
+void* azalea::window::WindowsWindow::getNativeWindowHandle() { return this->m_windowHandle; }

@@ -12,31 +12,33 @@ namespace azalea {
 namespace azalea::window {
     class WindowsWindow : public AzaleaWindow {
         friend class AzaleaWindow;
+
     public:
-        WindowsWindow(AzaleaWindowOptions opts);
+        WindowsWindow( AzaleaWindowOptions opts );
         ~WindowsWindow() override;
 
         void show() override;
         void hide() override;
         void poll() override;
+        void maximizeWindow() override;
+        void requestAttention() override;
 
-        void setWidth(int32_t width) override;
-        void setHeight(int32_t height) override;
-        void setWindowMode(AzaleaWindowMode mode) override;
+        void setWidth( int32_t width ) override;
+        void setHeight( int32_t height ) override;
+        void setWindowMode( AzaleaWindowMode mode ) override;
+
         void setTitle( std::string title ) override;
 
         void* getNativeWindowHandle() override;
 
     private:
-        WindowsWindow(WindowsWindow* window, AzaleaWindowOptions options);
-        void m_internalApplyWindowForm(AzaleaWindowMode mode, bool startup);
+        WindowsWindow( WindowsWindow* window, AzaleaWindowOptions options );
 
-        void maximizeWindow(); // this has to move
+        void m_internalApplyWindowForm( AzaleaWindowMode mode, bool startup );
 
         HWND m_windowHandle;
-
     };
-}
+}// namespace azalea::window
 
 #include <Azalea/Core/Application.hpp>
 

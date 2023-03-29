@@ -37,9 +37,10 @@ namespace azalea::window {
         virtual void show();
         virtual void hide();
         virtual void poll();
+        virtual void maximizeWindow();
+        virtual void requestAttention();
 
         AzaleaWindow* createChildWindow( AzaleaWindowOptions opts );
-
 
         bool shouldClose();
 

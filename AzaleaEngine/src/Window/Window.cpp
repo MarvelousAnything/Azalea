@@ -37,6 +37,8 @@ azalea::window::AzaleaWindow* azalea::window::AzaleaWindow::createChildWindow( a
 void azalea::window::AzaleaWindow::show() {}
 void azalea::window::AzaleaWindow::hide() {}
 void azalea::window::AzaleaWindow::poll() {}
+void azalea::window::AzaleaWindow::maximizeWindow() {}
+void azalea::window::AzaleaWindow::requestAttention() {}
 
 void azalea::window::AzaleaWindow::setWindowMode( azalea::window::AzaleaWindowMode mode ) { this->m_windowMode = mode; }
 
