@@ -43,6 +43,7 @@ namespace azalea::window {
         AzaleaWindow* createChildWindow( AzaleaWindowOptions opts );
 
         bool shouldClose();
+        bool isWindowShown();
 
         virtual void setWidth( int32_t width );
         int32_t getWidth();
@@ -78,6 +79,7 @@ namespace azalea::window {
         std::vector<AzaleaWindow*> m_children;
 
         bool m_shouldClose;
+        bool m_isShowing;
 
     private:
         int32_t m_width;

@@ -18,8 +18,7 @@ public:
         auto* win = new azalea::window::WindowsWindow(opts);
         win->show();
         while (!win->shouldClose()) {
-
-
+            win->setWidth(920);
             win->poll();
         }
     };

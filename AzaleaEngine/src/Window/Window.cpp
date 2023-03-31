@@ -34,8 +34,8 @@ azalea::window::AzaleaWindow* azalea::window::AzaleaWindow::createChildWindow( a
 {
     return new AzaleaWindow( this, opts );
 }
-void azalea::window::AzaleaWindow::show() {}
-void azalea::window::AzaleaWindow::hide() {}
+void azalea::window::AzaleaWindow::show() { this->m_isShowing = true; }
+void azalea::window::AzaleaWindow::hide() { this->m_isShowing = false; }
 void azalea::window::AzaleaWindow::poll() {}
 void azalea::window::AzaleaWindow::maximizeWindow() {}
 void azalea::window::AzaleaWindow::requestAttention() {}
@@ -43,6 +43,7 @@ void azalea::window::AzaleaWindow::requestAttention() {}
 void azalea::window::AzaleaWindow::setWindowMode( azalea::window::AzaleaWindowMode mode ) { this->m_windowMode = mode; }
 
 bool azalea::window::AzaleaWindow::shouldClose() { return this->m_shouldClose; }
+bool azalea::window::AzaleaWindow::isWindowShown() { return this->m_isShowing; }
 
 azalea::window::AzaleaWindowMode azalea::window::AzaleaWindow::getMode() { return this->m_windowMode; }
 
@@ -53,7 +54,6 @@ int32_t azalea::window::AzaleaWindow::getHeight() { return this->m_height; }
 void azalea::window::AzaleaWindow::setWidth( int32_t width ) { this->m_width = width; }
 
 int32_t azalea::window::AzaleaWindow::getWidth() { return this->m_width; }
-
 void azalea::window::AzaleaWindow::setTitle( std::string title ) { this->m_title = title; }
 std::string azalea::window::AzaleaWindow::getTitle() { return this->m_title; }
 void* azalea::window::AzaleaWindow::getNativeWindowHandle() { return nullptr; }

@@ -70,7 +70,11 @@ void azalea::window::WindowsWindow::maximizeWindow()
                   SWP_NOACTIVATE | SWP_NOZORDER | SWP_FRAMECHANGED );
 }
 
-void azalea::window::WindowsWindow::show() { ShowWindow( this->m_windowHandle, SW_SHOWNA ); }
+void azalea::window::WindowsWindow::show()
+{
+    AzaleaWindow::hide();
+    ShowWindow( this->m_windowHandle, SW_SHOWNA );
+}
 
 void azalea::window::WindowsWindow::m_internalApplyWindowForm( azalea::window::AzaleaWindowMode mode, bool startup )
 {
@@ -106,7 +110,11 @@ void azalea::window::WindowsWindow::poll()
     DispatchMessage( &message );
 }
 
-void azalea::window::WindowsWindow::hide() { ShowWindow( this->m_windowHandle, SW_HIDE ); }
+void azalea::window::WindowsWindow::hide()
+{
+    AzaleaWindow::hide();
+    ShowWindow( this->m_windowHandle, SW_HIDE );
+}
 
 void azalea::window::WindowsWindow::requestAttention() { FlashWindow( this->m_windowHandle, false ); }
 
@@ -119,13 +127,14 @@ void azalea::window::WindowsWindow::setWindowMode( azalea::window::AzaleaWindowM
 void azalea::window::WindowsWindow::setWidth( int32_t width )
 {
     AzaleaWindow::setWidth( width );
-    SetWindowPos( this->m_windowHandle, 0, 0, width, this->getHeight(), SWP_NOMOVE, SWP_FRAMECHANGED );
+    printf("%i", this->getHeight());
+    SetWindowPos( this->m_windowHandle, nullptr, 0, 0, width, this->getHeight(), SWP_NOMOVE | SWP_FRAMECHANGED );
 }
 
 void azalea::window::WindowsWindow::setHeight( int32_t height )
 {
     AzaleaWindow::setHeight( height );
-    SetWindowPos( this->m_windowHandle, 0, 0, this->getWidth(), height, SWP_NOMOVE, SWP_FRAMECHANGED );
+    SetWindowPos( this->m_windowHandle, nullptr, 0, 0, this->getWidth(), height, SWP_NOMOVE | SWP_FRAMECHANGED );
 }
 
 void azalea::window::WindowsWindow::setTitle( std::string title )
