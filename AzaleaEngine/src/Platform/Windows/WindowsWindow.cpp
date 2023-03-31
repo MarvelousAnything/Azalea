@@ -127,7 +127,6 @@ void azalea::window::WindowsWindow::setWindowMode( azalea::window::AzaleaWindowM
 void azalea::window::WindowsWindow::setWidth( int32_t width )
 {
     AzaleaWindow::setWidth( width );
-    printf("%i", this->getHeight());
     SetWindowPos( this->m_windowHandle, nullptr, 0, 0, width, this->getHeight(), SWP_NOMOVE | SWP_FRAMECHANGED );
 }
 
