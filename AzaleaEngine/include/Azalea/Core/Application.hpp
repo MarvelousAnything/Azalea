@@ -6,6 +6,10 @@
 
 namespace azalea {
 
+    /**
+     * @brief The platform specific data required to run the current platform
+     * @internal This struct should only be used internally
+     */
     struct PlatformInfo
     {
         std::string platformName;
@@ -38,6 +42,11 @@ namespace azalea {
          */
         static AzaleaApplication* get();
 
+        /**
+         * @brief Sets the current platform info
+         * @param info the updated info
+         * @internal This method should be used for internal purposes only
+         */
         void setPlatformInfo(PlatformInfo* info);
 
         /**
@@ -46,6 +55,10 @@ namespace azalea {
          */
         StandardOutputLogger* getLogger();
 
+        /**
+         * @brief Gets the current platform info
+         * @return the platform info
+         */
         PlatformInfo* getPlatformInfo();
 
     private:
