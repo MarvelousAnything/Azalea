@@ -6,6 +6,8 @@ set(SOURCE_DIRS
         src/Core
         src/Window)
 
+set(PLATFORM_LIBRARIES)
+
 # Sources common to all platforms
 foreach (SOURCE_DIR ${SOURCE_DIRS})
     file(GLOB SOURCES
@@ -19,14 +21,22 @@ if (WIN32)
     file(GLOB_RECURSE PLATFORM_SRC src/Platform/Windows/**.cpp)
     list(APPEND SRC ${PLATFORM_SRC})
 elseif (UNIX)
+    message(STATUS "Platform: UNIX")
+
     file(GLOB_RECURSE PLATFORM_SRC src/Platform/Unix/**.cpp)
     list(APPEND SRC ${PLATFORM_SRC})
-elseif (APPLE)
-    file(GLOB_RECURSE PLATFORM_SRC src/Platform/MacOS/**.cpp)
-    list(APPEND SRC ${PLATFORM_SRC})
+
+    find_package(OpenGL REQUIRED)
+    find_package(glfw3 3.3 REQUIRED)
+    set(PLATFORM_LIBRARIES
+            glfw
+            GLEW
+            OpenGL::GL
+)
 else ()
     message(FATAL_ERROR "Unsupported platform")
 endif ()
 
-add_library(AzaleaEngine STATIC ${SRC} ${PLATFORM_SRC})
+add_library(AzaleaEngine STATIC ${SRC})
 target_include_directories(AzaleaEngine PUBLIC include)
+target_link_libraries(AzaleaEngine PUBLIC ${PLATFORM_LIBRARIES})
