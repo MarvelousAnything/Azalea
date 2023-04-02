@@ -2,6 +2,7 @@
 
 #include "Azalea/Platform/Unix//UnixWindow.hpp"
 #include "Azalea/Platform/Unix/UnixPlatformUtil.hpp"
+#include "Azalea/Core/Macros.hpp"
 
 namespace azalea::window {
     UnixWindow::UnixWindow(UnixWindow* window, AzaleaWindowOptions opts)
@@ -23,7 +24,7 @@ namespace azalea::window {
 
             if (!m_window) {
                 glfwTerminate();
-                azalea::AzaleaApplication::get()->getLogger()->error(LogErrorType::GENERIC_ERROR, "Failed to create GLFW window");
+                AZALEA_LOG_GENERIC_ERROR("Failed to create the Azalea Window\n");
             }
         }
     }
