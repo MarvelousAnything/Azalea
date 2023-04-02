@@ -26,25 +26,6 @@ namespace azalea {
         std::vector<std::function<void(const T&)>> m_listeners; // TODO(Chloe) I might make this a full interface and just remove this
     };
 
-
-
-    class TestEvent : public Event<TestEvent> {
-        friend class Event<TestEvent>;
-    public:
-        TestEvent(int x, int y);
-
-        int getX() { return this->m_x; };
-        int getY() { return this->m_y; };
-
-        void addListener( std::function<void( const TestEvent& )> listeners ) override;
-
-        void invoke() override;
-    private:
-        int m_x;
-
-        int m_y;
-    };
-
 }
 
 #endif// AZALEA_EVENT_HPP

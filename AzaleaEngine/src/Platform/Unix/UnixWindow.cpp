@@ -33,6 +33,13 @@ namespace azalea::window {
             if (glewInit() != GLEW_OK) {
                 AZALEA_LOG_GENERIC_ERROR("Failed to initialize GLEW\n");
             }
+
+            glfwSetWindowCloseCallback(m_window, [](GLFWwindow* glfwWindow) {
+                auto* windowPtr = (UnixWindow*) glfwGetWindowUserPointer(glfwWindow);
+                glfwDestroyWindow(windowPtr->m_window);
+                windowPtr->m_isShowing = false;
+                windowPtr->m_shouldClose = true;
+            });
         }
     }
 
@@ -66,11 +73,11 @@ namespace azalea::window {
     }
 
     void UnixWindow::setWidth(int32_t width) {
-        glfwSetWindowAspectRatio(m_window, width, getHeight());
+        glfwSetWindowSize(m_window, width, getHeight());
     }
 
     void UnixWindow::setHeight(int32_t height) {
-        glfwSetWindowAspectRatio(m_window, getWidth(), height);
+        glfwSetWindowSize(m_window, getWidth(), height);
     }
 
     void UnixWindow::setWindowMode(AzaleaWindowMode mode) {

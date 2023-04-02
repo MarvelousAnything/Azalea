@@ -3,8 +3,6 @@
 
 #include <Azalea/Platform/Unix/UnixPlatformUtil.hpp>
 
-extern azalea::AzaleaApplication* azalea::instantiateGame(uint32_t argc, char **argv);
-
 int main(int argc, char **argv)
 {
     auto *gayme = azalea::instantiateGame(argc, argv);
