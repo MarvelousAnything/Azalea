@@ -13,7 +13,7 @@ namespace azalea::window {
         friend class AzaleaWindow;
 
     public:
-        explicit UnixWindow(AzaleaWindowOptions opts);
+        explicit UnixWindow( AzaleaWindowOptions opts );
         ~UnixWindow() override;
 
         void show() override;
@@ -22,19 +22,27 @@ namespace azalea::window {
         void maximizeWindow() override;
         void requestAttention() override;
 
-        void setWidth(int32_t width) override;
-        void setHeight(int32_t height) override;
-        void setWindowMode(AzaleaWindowMode mode) override;
+        void setWidth( int32_t width ) override;
+        void setHeight( int32_t height ) override;
+        void setWindowMode( AzaleaWindowMode mode ) override;
 
-        void setTitle(std::string title) override;
+        void setTitle( std::string title ) override;
 
         void* getNativeWindowHandle() override;
 
+    protected:
+        static void setWindowClose( GLFWwindow* window ) {
+            auto* windowPtr = reinterpret_cast<UnixWindow*>( glfwGetWindowUserPointer( window ) );
+            glfwDestroyWindow( windowPtr->m_window );
+            windowPtr->m_isShowing = false;
+            windowPtr->m_shouldClose = true;
+        }
+
     private:
-        UnixWindow(UnixWindow* window, AzaleaWindowOptions options );
+        UnixWindow( UnixWindow* window, AzaleaWindowOptions options );
         GLFWwindow* m_window;
     };
-}
+}// namespace azalea::window
 
 
-#endif //AZALEA_UNIXWINDOW_HPP
+#endif// AZALEA_UNIXWINDOW_HPP
